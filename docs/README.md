@@ -11,6 +11,13 @@
 
 <p><img src="./screenshots/recovery.png"></p>
 
-<sub>
-powerd by <b><a target="_blank" href="https://github.com/murkl/arch-os">Arch OS</a></b>
-</sub>
+  <p>A recovery script for Arch Linux that handles LUKS2 encryption, repairs ext4 filesystems, and restores Btrfs snapshots automatically. It simplifies system recovery after failures by unlocking, repairing, and rolling back snapshots with minimal user input.</p>
+
+  <p>
+    <img src="https://img.shields.io/badge/MAINTAINED-YES-green?style=for-the-badge">
+    <img src="https://img.shields.io/badge/License-GPL_v2-blue?style=for-the-badge">
+  </p>
+  <p><sub>100% shellcheck approved</sub></p>
+  <p><sub>powered by <a href="https://github.com/murkl/arch-os">Arch OS</a></sub></p>
+
+</div>
