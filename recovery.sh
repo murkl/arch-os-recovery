@@ -300,10 +300,10 @@ gum_cyan() { gum_style --foreground "$COLOR_CYAN" "${@}"; }
 gum_purple() { gum_style --foreground "$COLOR_PURPLE" "${@}"; }
 
 # Gum prints
-gum_title() { gum_foreground "${*}" && gum join "$(gum_foreground --bold "+ ")" "$(gum_foreground --bold "${*}")"; }
-gum_info() { gum_green "$*" && gum join "$(gum_green --bold "• ")" "$(gum_white "${*}")"; }
-gum_warn() { gum_yellow "$*" && gum join "$(gum_yellow --bold "• ")" "$(gum_white "${*}")"; }
-gum_fail() { gum_red "$*" && gum join "$(gum_red --bold "• ")" "$(gum_white "${*}")"; }
+gum_title() { gum join "$(gum_foreground --bold "+ ")" "$(gum_foreground --bold "${*}")"; }
+gum_info() { gum join "$(gum_green --bold "• ")" "$(gum_white "${*}")"; }
+gum_warn() { gum join "$(gum_yellow --bold "• ")" "$(gum_white "${*}")"; }
+gum_fail() { gum join "$(gum_red --bold "• ")" "$(gum_white "${*}")"; }
 
 # Gum wrapper
 gum_style() { gum style "${@}"; }
