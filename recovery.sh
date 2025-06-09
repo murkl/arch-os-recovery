@@ -23,7 +23,7 @@ set -E          # ERR trap inherited by shell functions (errtrace)
 VERSION='1.0.0'
 
 # GUM
-GUM_VERSION="0.13.0"
+GUM_VERSION="0.16.1"
 
 # ENVIRONMENT
 
