@@ -11,7 +11,7 @@
 
 <p><img src="./screenshots/recovery.png"></p>
 
-  <p>A recovery script for Arch Linux that handles LUKS2 encryption, repairs ext4 filesystems, and restores Btrfs snapshots automatically. It simplifies system recovery after failures by unlocking, repairing, and rolling back snapshots with minimal user input.</p>
+  <p>A recovery script for Arch OS that handles LUKS2 encryption, repairs ext4 filesystems, and restores Btrfs snapshots automatically. It simplifies system recovery after failures by unlocking, repairing, and rolling back snapshots with minimal user input.</p>
 
   <p>
     <img src="https://img.shields.io/badge/MAINTAINED-YES-green?style=for-the-badge">
