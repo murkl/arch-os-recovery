@@ -212,7 +212,7 @@ main() {
         [ -z "$snapshots" ] && gum_fail "No Snapshot found in @snapshots" && exit 130
         snapshot_input=$(echo "$snapshots" | gum_filter --header "+ Select Snapshot") || exit 130
         gum_info "Snapshot: ${snapshot_input}"
-        echo && gum_confirm "Confirm Rollback to @" || exit 130
+        gum_confirm "Confirm Rollback to @" || exit 130
 
         # Rollback
         btrfs subvolume delete --recursive "${recovery_mount_dir}/@"
