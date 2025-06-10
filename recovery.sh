@@ -217,12 +217,16 @@ main() {
         # Rollback
         btrfs subvolume delete --recursive "${recovery_mount_dir}/@"
         btrfs subvolume snapshot "${recovery_mount_dir}/${snapshot_input}" "${recovery_mount_dir}/@"
-        rm -f "${recovery_mount_dir}/@/var/lib/pacman/db.lck"
 
-        # Mount and rebuild kernel image
+        # Mount new root & boot
         local mount_opts="defaults,noatime,compress=zstd"
         mount --mkdir -t btrfs -o ${mount_opts},subvol=@ "${mount_target}" "${recovery_mount_dir}"
         mount "$recovery_boot_partition" "${recovery_mount_dir}/boot"
+
+        # Remove pacman lock
+        rm -f "${recovery_mount_dir}/var/lib/pacman/db.lck"
+
+        # rebuild kernel for /boot
         arch-chroot "${recovery_mount_dir}" mkinitcpio -P
 
         # Finish
