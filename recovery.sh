@@ -220,10 +220,12 @@ main() {
 
         # Mount new root & boot
         local mount_opts="defaults,noatime,compress=zstd"
+        gum_info "Mounting BTRFS Snapshot"
         mount --mkdir -t btrfs -o ${mount_opts},subvol=@ "${mount_target}" "${recovery_mount_dir}"
         mount "$recovery_boot_partition" "${recovery_mount_dir}/boot"
 
         # Remove pacman lock
+        gum_info "Remove Pacman Lock"
         rm -f "${recovery_mount_dir}/var/lib/pacman/db.lck"
 
         # Rebuild kernel image for /boot
@@ -231,6 +233,7 @@ main() {
             local kernel_name kernel_version
             for kernel_version in "${recovery_mount_dir}/lib/modules/"*; do
                 kernel_name=$(basename "$kernel_version")
+                gum_info "Rebuild Kernel: ${kernel_name}"
                 arch-chroot "${recovery_mount_dir}" mkinitcpio -c /etc/mkinitcpio.conf -k "$kernel_name" -g "/boot/initramfs-${kernel_name}.img"
             done
         fi
