@@ -1,7 +1,6 @@
 <h1 align="center">
   <img src="./logo.svg" width="150" height="150">
   <p>Arch OS Recovery</p>
-  <p>!! experimental !!</p>
 </h1>
 
 <div align="center">
