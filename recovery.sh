@@ -217,9 +217,18 @@ main() {
         # Rollback
         btrfs subvolume delete --recursive "${recovery_mount_dir}/@"
         btrfs subvolume snapshot "${recovery_mount_dir}/${snapshot_input}" "${recovery_mount_dir}/@"
-        rm -f "${recovery_mount_dir}/mnt/var/lib/pacman/db.lck"
+        rm -f "${recovery_mount_dir}/@/var/lib/pacman/db.lck"
+
+        # Mount and rebuild kernel image
+        local mount_opts="defaults,noatime,compress=zstd"
+        mount --mkdir -t btrfs -o ${mount_opts},subvolid=5 "${mount_target}" "${recovery_mount_dir}"
+        mount "$recovery_boot_partition" "${recovery_mount_dir}/boot"
+        arch-chroot "${recovery_mount_dir}" mkinitcpio -P
+
+        # Finish
         gum_info "Snapshot ${snapshot_input} is set to @ after next reboot"
-        gum_green "Rollback successfully finished"
+        echo && gum_green "Rollback successfully finished"
+        gum_confirm "Unmount ${recovery_mount_dir}?" && recovery_unmount
     fi
 }
 
