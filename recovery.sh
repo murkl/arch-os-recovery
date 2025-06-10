@@ -221,8 +221,8 @@ main() {
         # Mount new root & boot
         gum_info "Mounting BTRFS Snapshot"
         local mount_opts="defaults,noatime,compress=zstd"
-        #mount --mkdir -t btrfs -o ${mount_opts},subvol="@" "${mount_target}" "${recovery_mount_dir}"
-        mount --mkdir -t btrfs -o ${mount_opts},subvolid=5 "${mount_target}" "${recovery_mount_dir}"
+        #mount --mkdir -t btrfs -o ${mount_opts},subvolid=5 "${mount_target}" "${recovery_mount_dir}"
+        mount --mkdir -t btrfs -o ${mount_opts},subvol=@ "${mount_target}" "${recovery_mount_dir}"
         mount --mkdir "$recovery_boot_partition" "${recovery_mount_dir}/boot"
 
         # Remove pacman lock
@@ -231,12 +231,25 @@ main() {
 
         # Rebuild kernel image for /boot
         if gum_confirm "Rebuild Kernel?"; then
-            local kernel_name kernel_version
-            for kernel_version in "${recovery_mount_dir}/lib/modules/"*; do
-                kernel_name=$(basename "$kernel_version")
-                gum_info "Rebuild Kernel: ${kernel_name}"
-                arch-chroot "${recovery_mount_dir}" mkinitcpio -c /etc/mkinitcpio.conf -k "${kernel_name}" -g "/boot/initramfs-${kernel_name}.img"
-                arch-chroot "${recovery_mount_dir}" mkinitcpio -c /etc/mkinitcpio.conf -k "${kernel_name}" -g "/boot/initramfs-${kernel_name}-fallback.img" -S autodetect
+            local kernel_version_dir kernel_version kernel_type
+            for kernel_version_dir in "${recovery_mount_dir}/lib/modules/"*; do
+                [ -d "$kernel_version_dir" ] || continue
+                kernel_version=$(basename "$kernel_version_dir")
+
+                # Supported kernel list
+                if [[ "$kernel_version" == *zen* ]]; then
+                    kernel_type="linux-zen"
+                elif [[ "$kernel_version" == *lts* ]]; then
+                    kernel_type="linux-lts"
+                elif [[ "$kernel_version" == *hardened* ]]; then
+                    kernel_type="linux-hardened"
+                else
+                    kernel_type="linux"
+                fi
+
+                gum_info "Rebuild Kernel (${kernel_type}): ${kernel_version}"
+                arch-chroot "${recovery_mount_dir}" mkinitcpio -c /etc/mkinitcpio.conf -k "${kernel_version}" -g "/boot/initramfs-${kernel_type}.img"
+                arch-chroot "${recovery_mount_dir}" mkinitcpio -c /etc/mkinitcpio.conf -k "${kernel_version}" -g "/boot/initramfs-${kernel_type}-fallback.img" -S autodetect
             done
 
             # Update Grub
