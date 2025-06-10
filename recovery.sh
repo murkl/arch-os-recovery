@@ -237,6 +237,11 @@ main() {
                 arch-chroot "${recovery_mount_dir}" mkinitcpio -c /etc/mkinitcpio.conf -k "${kernel_name}" -g "/boot/initramfs-${kernel_name}.img"
                 arch-chroot "${recovery_mount_dir}" mkinitcpio -c /etc/mkinitcpio.conf -k "${kernel_name}" -g "/boot/initramfs-${kernel_name}-fallback.img" -S autodetect
             done
+
+            # Update Grub
+            if [ -d "${recovery_mount_dir}/boot/grub" ] && [ -f "${recovery_mount_dir}/boot/grub/grub.cfg" ]; then
+                arch-chroot "${recovery_mount_dir}" grub-mkconfig -o /boot/grub/grub.cfg
+            fi
         fi
 
         # Finish
