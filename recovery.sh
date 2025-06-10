@@ -240,6 +240,7 @@ main() {
 
             # Update Grub
             if [ -d "${recovery_mount_dir}/boot/grub" ] && [ -f "${recovery_mount_dir}/boot/grub/grub.cfg" ]; then
+                gum_info "Rebuild Grub config"
                 arch-chroot "${recovery_mount_dir}" grub-mkconfig -o /boot/grub/grub.cfg
             fi
         fi
