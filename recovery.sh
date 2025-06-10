@@ -228,7 +228,11 @@ main() {
 
         # Rebuild kernel image for /boot
         if gum_confirm "Rebuild Kernel?"; then
-            arch-chroot "${recovery_mount_dir}" mkinitcpio -P
+            local kernel_name kernel_version
+            for kernel_version in "${recovery_mount_dir}/lib/modules/"*; do
+                kernel_name=$(basename "$kernel_version")
+                arch-chroot "${recovery_mount_dir}" mkinitcpio -c /etc/mkinitcpio.conf -k "$kernel_name" -g "/boot/initramfs-${kernel_name}.img"
+            done
         fi
 
         # Finish
