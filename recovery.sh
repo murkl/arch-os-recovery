@@ -221,7 +221,7 @@ main() {
         # Mount new root & boot
         local mount_opts="defaults,noatime,compress=zstd"
         gum_info "Mounting BTRFS Snapshot"
-        mount --mkdir -t btrfs -o ${mount_opts},subvol=@ "${mount_target}" "${recovery_mount_dir}"
+        mount --mkdir -t btrfs -o ${mount_opts},subvol="${recovery_mount_dir}/@" "${mount_target}" "${recovery_mount_dir}"
         mount "$recovery_boot_partition" "${recovery_mount_dir}/boot"
 
         # Remove pacman lock
