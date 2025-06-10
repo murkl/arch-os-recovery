@@ -241,7 +241,7 @@ main() {
 
         # Rebuild kernel image for /boot
         if gum_confirm "Rebuild Kernel?"; then
-            local kernel_version_dir kernel_version kernel_type
+            local kernel_version_dir kernel_version kernel_type kernel_pkg_files pkg_file
             for kernel_version_dir in "${recovery_mount_dir}/lib/modules/"*; do
                 [ -d "$kernel_version_dir" ] || continue
                 kernel_version=$(basename "$kernel_version_dir")
@@ -257,14 +257,32 @@ main() {
                     kernel_type="linux"
                 fi
 
-                gum_info "Rebuild Kernel (${kernel_type}): ${kernel_version}"
+                gum_info "Restoring kernel image (${kernel_type}) for ${kernel_version} from package"
+
+                # Find kernel package in cache (glob expansion safely)
+                shopt -s nullglob
+                kernel_pkg_files=("${recovery_mount_dir}/var/cache/pacman/pkg/${kernel_type}-"*"${kernel_version%%-*}"*.pkg.tar.*)
+                shopt -u nullglob
+
+                # Extract image
+                if [ "${#kernel_pkg_files[@]}" -gt 0 ]; then
+                    pkg_file="${kernel_pkg_files[0]}"
+                    # Extract kernel image from package
+                    bsdtar -xOf "$pkg_file" "boot/vmlinuz-${kernel_type}" >"${recovery_mount_dir}/boot/vmlinuz-${kernel_type}"
+                    gum_info "Kernel image ${kernel_type} extracted"
+                else
+                    gum_fail "No matching kernel package for ${kernel_type} and version ${kernel_version} found in cache!"
+                    exit 1
+                fi
+
+                # Build initramfs
                 arch-chroot "${recovery_mount_dir}" mkinitcpio -c /etc/mkinitcpio.conf -k "${kernel_version}" -g "/boot/initramfs-${kernel_type}.img"
                 arch-chroot "${recovery_mount_dir}" mkinitcpio -c /etc/mkinitcpio.conf -k "${kernel_version}" -g "/boot/initramfs-${kernel_type}-fallback.img" -S autodetect
             done
 
             # Update Grub
             if [ -d "${recovery_mount_dir}/boot/grub" ] && [ -f "${recovery_mount_dir}/boot/grub/grub.cfg" ]; then
-                gum_info "Rebuild Grub config"
+                gum_info "Rebuilding Grub config"
                 arch-chroot "${recovery_mount_dir}" grub-mkconfig -o /boot/grub/grub.cfg
             fi
         fi
