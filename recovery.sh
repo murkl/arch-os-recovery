@@ -219,10 +219,11 @@ main() {
         btrfs subvolume snapshot "${recovery_mount_dir}/${snapshot_input}" "${recovery_mount_dir}/@"
 
         # Mount new root & boot
-        local mount_opts="defaults,noatime,compress=zstd"
         gum_info "Mounting BTRFS Snapshot"
-        mount --mkdir -t btrfs -o ${mount_opts},subvol="${recovery_mount_dir}/@" "${mount_target}" "${recovery_mount_dir}"
-        mount "$recovery_boot_partition" "${recovery_mount_dir}/boot"
+        local mount_opts="defaults,noatime,compress=zstd"
+        #mount --mkdir -t btrfs -o ${mount_opts},subvol="@" "${mount_target}" "${recovery_mount_dir}"
+        mount --mkdir -t btrfs -o ${mount_opts},subvolid=5 "${mount_target}" "${recovery_mount_dir}"
+        mount --mkdir "$recovery_boot_partition" "${recovery_mount_dir}/boot"
 
         # Remove pacman lock
         gum_info "Remove Pacman Lock"
