@@ -234,7 +234,8 @@ main() {
             for kernel_version in "${recovery_mount_dir}/lib/modules/"*; do
                 kernel_name=$(basename "$kernel_version")
                 gum_info "Rebuild Kernel: ${kernel_name}"
-                arch-chroot "${recovery_mount_dir}" mkinitcpio -c /etc/mkinitcpio.conf -k "$kernel_name" -g "/boot/initramfs-${kernel_name}.img"
+                arch-chroot "${recovery_mount_dir}" mkinitcpio -c /etc/mkinitcpio.conf -k "${kernel_name}" -g "/boot/initramfs-${kernel_name}.img"
+                arch-chroot "${recovery_mount_dir}" mkinitcpio -c /etc/mkinitcpio.conf -k "${kernel_name}" -g "/boot/initramfs-${kernel_name}-fallback.img" -S autodetect
             done
         fi
 
