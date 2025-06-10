@@ -268,7 +268,7 @@ main() {
                 if [ "${#kernel_pkg_files[@]}" -gt 0 ]; then
                     pkg_file="${kernel_pkg_files[0]}"
                     # Extract kernel image from package
-                    bsdtar -xOf "$pkg_file" "boot/vmlinuz-${kernel_type}" >"${recovery_mount_dir}/boot/vmlinuz-${kernel_type}"
+                    bsdtar -xOf "$pkg_file" "usr/lib/modules/${kernel_version}/vmlinuz" > "${recovery_mount_dir}/boot/vmlinuz-${kernel_type}"
                     gum_info "Kernel image ${kernel_type} extracted"
                 else
                     gum_fail "No matching kernel package for ${kernel_type} and version ${kernel_version} found in cache!"
