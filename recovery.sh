@@ -226,8 +226,10 @@ main() {
         # Remove pacman lock
         rm -f "${recovery_mount_dir}/var/lib/pacman/db.lck"
 
-        # rebuild kernel for /boot
-        arch-chroot "${recovery_mount_dir}" mkinitcpio -P
+        # Rebuild kernel image for /boot
+        if gum_confirm "Rebuild Kernel?"; then
+            arch-chroot "${recovery_mount_dir}" mkinitcpio -P
+        fi
 
         # Finish
         gum_info "Snapshot ${snapshot_input} is set to @ after next reboot"
