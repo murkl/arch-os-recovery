@@ -112,6 +112,8 @@ main() {
     local mount_fs_btrfs
     local mount_fs_ext4
 
+    # ---------------------------------------------------------------------------------------
+
     # Mount encrypted disk
     if [ "$recovery_encryption_enabled" = "true" ]; then
 
@@ -149,6 +151,8 @@ main() {
         fi
 
     else
+
+        # ---------------------------------------------------------------------------------------
 
         mount_fs_btrfs=$(lsblk -no fstype "${mount_target}" 2>/dev/null | grep -qw btrfs && echo true || echo false)
         mount_fs_ext4=$(lsblk -no fstype "${mount_target}" 2>/dev/null | grep -qw ext4 && echo true || echo false)
@@ -201,6 +205,8 @@ main() {
         gum_green ">> Exit Recovery"
     fi
 
+    # ---------------------------------------------------------------------------------------
+
     # BTRFS Rollback
     if $mount_fs_btrfs; then
 
@@ -212,7 +218,7 @@ main() {
         [ -z "$snapshots" ] && gum_fail "No Snapshot found in @snapshots" && exit 130
         snapshot_input=$(echo "$snapshots" | gum_filter --header "+ Select Snapshot") || exit 130
         gum_info "Snapshot: ${snapshot_input}"
-        gum_confirm "Confirm Rollback to @" || exit 130
+        gum_confirm "Confirm Rollback @ to ${snapshot_input}?" || exit 130
 
         # Rollback
         btrfs subvolume delete --recursive "${recovery_mount_dir}/@"
@@ -221,10 +227,12 @@ main() {
         # Mount new root & boot
         gum_info "Mounting BTRFS Snapshot"
         local mount_opts="defaults,noatime,compress=zstd"
+        swapoff -a &>/dev/null
+        umount -A -R "$recovery_mount_dir" &>/dev/null
         #mount --mkdir -t btrfs -o ${mount_opts},subvolid=5 "${mount_target}" "${recovery_mount_dir}"
         mount --mkdir -t btrfs -o ${mount_opts},subvol=@ "${mount_target}" "${recovery_mount_dir}"
 
-        fsck.vfat -v -a "$recovery_boot_partition" || true
+        #fsck.vfat -v -a "$recovery_boot_partition" || true
         mount --mkdir "$recovery_boot_partition" "${recovery_mount_dir}/boot"
 
         # Remove pacman lock
