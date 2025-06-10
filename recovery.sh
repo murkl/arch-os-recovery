@@ -19,7 +19,7 @@ set -E          # ERR trap inherited by shell functions (errtrace)
 : "${GUM:=./gum}"   # GUM=/usr/bin/gum ./recovery.sh
 
 # SCRIPT
-VERSION='1.0.0'
+VERSION='0.0.1'
 
 # GUM
 GUM_VERSION="0.16.0"
