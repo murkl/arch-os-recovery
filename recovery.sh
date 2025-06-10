@@ -221,7 +221,7 @@ main() {
 
         # Mount and rebuild kernel image
         local mount_opts="defaults,noatime,compress=zstd"
-        mount --mkdir -t btrfs -o ${mount_opts},subvolid=5 "${mount_target}" "${recovery_mount_dir}"
+        mount --mkdir -t btrfs -o ${mount_opts},subvolid=@ "${mount_target}" "${recovery_mount_dir}"
         mount "$recovery_boot_partition" "${recovery_mount_dir}/boot"
         arch-chroot "${recovery_mount_dir}" mkinitcpio -P
 
