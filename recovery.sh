@@ -224,7 +224,7 @@ main() {
         #mount --mkdir -t btrfs -o ${mount_opts},subvolid=5 "${mount_target}" "${recovery_mount_dir}"
         mount --mkdir -t btrfs -o ${mount_opts},subvol=@ "${mount_target}" "${recovery_mount_dir}"
 
-        fsck.vfat -v -a "$recovery_boot_partition"
+        fsck.vfat -v -a "$recovery_boot_partition" || true
         mount --mkdir "$recovery_boot_partition" "${recovery_mount_dir}/boot"
 
         # Remove pacman lock
