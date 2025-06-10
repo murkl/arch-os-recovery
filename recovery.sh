@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC1090
 
-#########################################################
+#######################################################
 # ARCH OS RECOVERY | Automated Arch Linux Recovery TUI
-#########################################################
+#######################################################
 
-# SOURCE:   https://github.com/murkl/arch-os
+# SOURCE:   https://github.com/murkl/arch-os-recovery
 # AUTOR:    murkl
 # ORIGIN:   Germany
 # LICENCE:  GPL 2.0
@@ -55,7 +54,7 @@ main() {
     # Traps (error & exit)
     trap 'trap_exit' EXIT
 
-    print_header "Arch OS Recovery"
+    gum_header "Arch OS Recovery"
     local recovery_boot_partition recovery_root_partition user_input items options
     local recovery_mount_dir="/mnt/recovery"
     local recovery_crypt_label="cryptrecovery"
@@ -235,29 +234,8 @@ trap_exit() {
 }
 
 # ////////////////////////////////////////////////////////////////////////////////////////////////////
-# HELPER FUNCTIONS
+# GUM
 # ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-print_header() {
-    local title="$1"
-    clear && gum_foreground '
- █████  ██████   ██████ ██   ██      ██████  ███████ 
-██   ██ ██   ██ ██      ██   ██     ██    ██ ██      
-███████ ██████  ██      ███████     ██    ██ ███████ 
-██   ██ ██   ██ ██      ██   ██     ██    ██      ██ 
-██   ██ ██   ██  ██████ ██   ██      ██████  ███████'
-    local header_version="               v. ${VERSION}"
-    [ "$DEBUG" = "true" ] && header_version="               d. ${VERSION}"
-    gum_white --margin "1 0" --align left --bold "Welcome to ${title} ${header_version}"
-    [ "$FORCE" = "true" ] && gum_red --bold "CAUTION: Force mode enabled. Cancel with: Ctrl + c" && echo
-    return 0
-}
-
-print_filled_space() {
-    local total="$1" && local text="$2" && local length="${#text}"
-    [ "$length" -ge "$total" ] && echo "$text" && return 0
-    local padding=$((total - length)) && printf '%s%*s\n' "$text" "$padding" ""
-}
 
 gum_init() {
     if [ ! -x ./gum ]; then
@@ -284,8 +262,22 @@ gum() {
 }
 
 # ////////////////////////////////////////////////////////////////////////////////////////////////////
-# GUM WRAPPER
+# WRAPPER
 # ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+gum_header() {
+    local title="$1"
+    clear && gum_foreground '
+ █████  ██████   ██████ ██   ██      ██████  ███████ 
+██   ██ ██   ██ ██      ██   ██     ██    ██ ██      
+███████ ██████  ██      ███████     ██    ██ ███████ 
+██   ██ ██   ██ ██      ██   ██     ██    ██      ██ 
+██   ██ ██   ██  ██████ ██   ██      ██████  ███████'
+    local header_version="               v. ${VERSION}"
+    [ "$DEBUG" = "true" ] && header_version="               d. ${VERSION}"
+    gum_white --margin "1 0" --align left --bold "Welcome to ${title} ${header_version}"
+    return 0
+}
 
 # Gum colors (https://github.com/muesli/termenv?tab=readme-ov-file#color-chart)
 gum_foreground() { gum_style --foreground "$COLOR_FOREGROUND" "${@}"; }
@@ -313,10 +305,6 @@ gum_choose() { gum choose --cursor "> " --header.foreground "$COLOR_FOREGROUND" 
 gum_filter() { gum filter --prompt "> " --indicator ">" --placeholder "Type to filter..." --height 8 --header.foreground "$COLOR_FOREGROUND" --indicator.foreground "$COLOR_FOREGROUND" --match.foreground "$COLOR_FOREGROUND" "${@}"; }
 gum_write() { gum write --prompt "> " --show-cursor-line --char-limit 0 --cursor.foreground "$COLOR_FOREGROUND" --header.foreground "$COLOR_FOREGROUND" "${@}"; }
 gum_spin() { gum spin --spinner line --title.foreground "$COLOR_FOREGROUND" --spinner.foreground "$COLOR_FOREGROUND" "${@}"; }
-
-# Gum key & value
-gum_proc() { log_proc "$*" && gum join "$(gum_green --bold "• ")" "$(gum_white --bold "$(print_filled_space 24 "${1}")")" "$(gum_white "  >  ")" "$(gum_green "${2}")"; }
-gum_property() { log_prop "$*" && gum join "$(gum_green --bold "• ")" "$(gum_white "$(print_filled_space 24 "${1}")")" "$(gum_green --bold "  >  ")" "$(gum_white --bold "${2}")"; }
 
 # ////////////////////////////////////////////////////////////////////////////////////////////////////
 # START MAIN
