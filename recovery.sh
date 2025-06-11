@@ -216,7 +216,7 @@ main() {
         #snapshots=$(btrfs subvolume list "$recovery_mount_dir" | awk '$NF ~ /^@snapshots\/[0-9]+\/snapshot$/ {print $NF}')
         snapshots=$(btrfs subvolume list -o "${recovery_mount_dir}/.snapshots" | awk '{print $NF}')
         [ -z "$snapshots" ] && gum_fail "No Snapshot found in @snapshots" && exit 130
-        snapshot_input=$(echo "$snapshots" | gum_filter --reverse --header "+ Select Snapshot") || exit 130
+        snapshot_input=$(echo "$snapshots" | gum_filter --header "+ Select Snapshot") || exit 130
         gum_info "Snapshot: ${snapshot_input}"
         gum_confirm "Confirm Rollback @ to ${snapshot_input}?" || exit 130
 
@@ -268,7 +268,7 @@ main() {
                 if [ "${#kernel_pkg_files[@]}" -gt 0 ]; then
                     pkg_file="${kernel_pkg_files[0]}"
                     # Extract kernel image from package
-                    bsdtar -xOf "$pkg_file" "usr/lib/modules/${kernel_version}/vmlinuz" > "${recovery_mount_dir}/boot/vmlinuz-${kernel_type}"
+                    bsdtar -xOf "$pkg_file" "usr/lib/modules/${kernel_version}/vmlinuz" >"${recovery_mount_dir}/boot/vmlinuz-${kernel_type}"
                     gum_info "Kernel image ${kernel_type} extracted"
                 else
                     gum_fail "No matching kernel package for ${kernel_type} and version ${kernel_version} found in cache!"
