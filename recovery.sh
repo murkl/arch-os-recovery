@@ -309,7 +309,7 @@ trap_exit() {
 # ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 gum_init() {
-    if [ ! -x ./gum ]; then
+    if [ ! -x "$GUM" ]; then
         clear && echo "Loading Arch OS Recovery..." # Loading
         local gum_url gum_path                      # Prepare URL with version os and arch
         # https://github.com/charmbracelet/gum/releases
