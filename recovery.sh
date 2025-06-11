@@ -216,7 +216,7 @@ main() {
         #snapshots=$(btrfs subvolume list "$recovery_mount_dir" | awk '$NF ~ /^@snapshots\/[0-9]+\/snapshot$/ {print $NF}')
         snapshots=$(btrfs subvolume list -o "${recovery_mount_dir}/.snapshots" | awk '{print $NF}')
         [ -z "$snapshots" ] && gum_fail "No Snapshot found in @snapshots" && exit 130
-        snapshot_input=$(echo "$snapshots" | gum_filter --header "+ Select Snapshot") || exit 130
+        snapshot_input=$(echo "$snapshots" | gum_filter --reverse --header "+ Select Snapshot") || exit 130
         gum_info "Snapshot: ${snapshot_input}"
         gum_confirm "Confirm Rollback @ to ${snapshot_input}?" || exit 130
 
