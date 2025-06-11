@@ -27,7 +27,7 @@ GUM_VERSION="0.16.0"
 # ENVIRONMENT
 
 # TEMP
-SCRIPT_TMP_DIR="$(mktemp -d "./.tmp.XXXXX")"
+SCRIPT_TMP_DIR="$(mktemp -d)"
 
 # COLORS
 COLOR_BLACK=0   #  #000000
