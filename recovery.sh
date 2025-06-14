@@ -15,8 +15,8 @@ set -e          # Terminate if any command exits with a non-zero
 set -E          # ERR trap inherited by shell functions (errtrace)
 
 # ENVIRONMENT
-: "${DEBUG:=false}" # DEBUG=true ./recovery.sh
-: "${GUM:=./gum}"   # GUM=/usr/bin/gum ./recovery.sh
+: "${DEBUG:=false}"            # DEBUG=true ./recovery.sh
+: "${GUM:=/usr/local/bin/gum}" # GUM=/usr/bin/gum ./recovery.sh
 
 # SCRIPT
 VERSION='1.0.0'
@@ -318,8 +318,8 @@ gum_init() {
         if ! tar -xf "${SCRIPT_TMP_DIR}/gum.tar.gz" --directory "$SCRIPT_TMP_DIR"; then echo "Error extracting ${SCRIPT_TMP_DIR}/gum.tar.gz" && exit 1; fi
         gum_path=$(find "${SCRIPT_TMP_DIR}" -type f -executable -name "gum" -print -quit)
         [ -z "$gum_path" ] && echo "Error: 'gum' binary not found in '${SCRIPT_TMP_DIR}'" && exit 1
-        if ! mv "$gum_path" ./gum; then echo "Error moving ${gum_path} to ./gum" && exit 1; fi
-        if ! chmod +x ./gum; then echo "Error chmod +x ./gum" && exit 1; fi
+        if ! mv "$gum_path" "${GUM}"; then echo "Error moving ${gum_path} to ${GUM}" && exit 1; fi
+        if ! chmod +x "${GUM}"; then echo "Error chmod +x ${GUM}" && exit 1; fi
     fi
 }
 
