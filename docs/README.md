@@ -15,7 +15,7 @@
 
   <p>
     <img src="https://img.shields.io/badge/MAINTAINED-YES-green?style=for-the-badge">
-    <img src="https://img.shields.io/badge/License-GPL_v2-blue?style=for-the-badge">
+    <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge">
   </p>
   <p><sub>100% shellcheck approved</sub></p>
   <p><sub>powered by <a href="https://github.com/murkl/arch-os">Arch OS</a></sub></p>
