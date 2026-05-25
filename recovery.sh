@@ -7,7 +7,7 @@
 # SOURCE:   https://github.com/murkl/arch-os-recovery
 # AUTOR:    murkl
 # ORIGIN:   Germany
-# LICENCE:  GPL 2.0
+# LICENCE:  MIT
 
 # CONFIG
 set -o pipefail # A pipeline error results in the error status of the entire pipeline
